@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:masamune_core/masamune_core.dart';
+export 'package:masamune_core/masamune_core.dart';
 export 'package:flutter_hooks/flutter_hooks.dart';
 
 part 'core/modelhook.dart';

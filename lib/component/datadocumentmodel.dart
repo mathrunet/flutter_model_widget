@@ -39,10 +39,11 @@ part of flutter_widget_model;
 class DataDocumentModel extends DocumentModel<DataDocument> {
   /// Value to be set in the data document.
   final Map<String, dynamic> data;
+
   /// Model for storing data in Key-Value-Pair document format.
-  /// 
+  ///
   /// Defines the data document of the specified [path].
-  /// 
+  ///
   /// If [data] is specified, [data] will be set to the specified [path].
   DataDocumentModel(String path, [this.data]) : super(path);
   @override

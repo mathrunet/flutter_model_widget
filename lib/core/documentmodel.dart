@@ -89,6 +89,15 @@ abstract class DocumentModelMixin<T extends IDataDocument> implements Model<T> {
     await state.save();
   }
 
+  /// Deletes the document data.
+  ///
+  /// Include and delete documents that have data on the server.
+  Future delete() async {
+    T state = this.state;
+    if (state == null) return;
+    await state.delete();
+  }
+
   /// Get the value stored in the document by [key] as [bool].
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.

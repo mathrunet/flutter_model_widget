@@ -25,10 +25,11 @@ part of flutter_widget_model;
 class DataFieldModel extends FieldModel<DataField> {
   /// Value to be set in the data field.
   final dynamic value;
+
   /// Data model for storing one-off data such as [String], [int], [double] and [bool].
-  /// 
+  ///
   /// Defines the data field of the specified [path].
-  /// 
+  ///
   /// If [value] is specified, [value] will be set to the specified [path].
   DataFieldModel(String path, [this.value]) : super(path);
   @override

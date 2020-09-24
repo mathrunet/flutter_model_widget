@@ -1,11 +1,11 @@
 part of flutter_widget_model;
 
 /// Data model with a data structure for collections.
-/// 
+///
 /// The contents of the collection store data documents and so on, including data that sequentially reads the stored data list as it is stored.
-/// 
+///
 /// ```
-/// 
+///
 /// Widget build(BuildContext context) {
 ///   return Scaffold(
 ///     appBar: AppBar(
@@ -23,7 +23,6 @@ part of flutter_widget_model;
 ///     floatingActionButton: FloatingActionButton(
 ///       onPressed: () {
 ///         DataCollectionModel("user").append(
-///           Texts.uuid,
 ///           builder: (doc) {
 ///             doc["uid"] = Texts.uuid;
 ///           },
@@ -36,13 +35,13 @@ part of flutter_widget_model;
 /// ```
 class DataCollectionModel extends CollectionModel<DataCollection> {
   final List<Map<String, dynamic>> data;
-  
+
   /// Data model with a data structure for collections.
-  /// 
+  ///
   /// The contents of the collection store data documents and so on, including data that sequentially reads the stored data list as it is stored.
-  /// 
+  ///
   /// Defines the data document of the specified [path].
-  /// 
+  ///
   /// If [data] is specified, [data] will be set to the specified [path].
   DataCollectionModel(String path, [this.data]) : super(path);
   @override
@@ -52,9 +51,9 @@ class DataCollectionModel extends CollectionModel<DataCollection> {
   }
 
   /// Add a new document to the collection.
-  /// 
+  ///
   /// Documents added to the collection are stored in the path specified by [id] (or UUID).
-  /// 
+  ///
   /// You can define the initial values of a document by specifying [data] and edit the internal data with the [builder].
   Future append(
       {String id,

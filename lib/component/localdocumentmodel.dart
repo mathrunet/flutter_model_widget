@@ -1,8 +1,7 @@
 part of flutter_widget_model;
 
-
 /// Model for storing data in Key-Value-Pair document format.
-/// 
+///
 /// Executing the [save] method saves the data in the device.
 /// Even if the application is terminated, the data will be restored and available.
 ///
@@ -42,10 +41,10 @@ part of flutter_widget_model;
 /// ```
 class LocalDocumentModel extends DocumentModel<LocalDocument> {
   /// Model for storing data in Key-Value-Pair document format.
-  /// 
+  ///
   /// Executing the [save] method saves the data in the device.
   /// Even if the application is terminated, the data will be restored and available.
-  /// 
+  ///
   /// Defines the data document of the specified [path].
   LocalDocumentModel(String path) : super(path);
   @override
