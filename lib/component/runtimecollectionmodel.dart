@@ -33,7 +33,7 @@ part of flutter_widget_model;
 ///   );
 /// }
 /// ```
-class RuntimeCollectionModel extends CollectionModel<DataCollection> {
+class RuntimeCollectionModel extends CollectionModel<RuntimeCollection> {
   final List<Map<String, dynamic>> data;
 
   /// Data model with a data structure for collections on runtime.
@@ -51,9 +51,9 @@ class RuntimeCollectionModel extends CollectionModel<DataCollection> {
       String thenByKey})
       : super(path, orderBy, orderByKey, thenBy, thenByKey);
   @override
-  FutureOr<DataCollection> build(ModelContext context) {
-    if (this.data == null) return DataCollection(this.path);
-    return DataCollection.fromList(this.path, this.data,
+  FutureOr<RuntimeCollection> build(ModelContext context) {
+    if (this.data == null) return RuntimeCollection(this.path);
+    return RuntimeCollection.fromList(this.path, this.data,
         orderBy: this.orderBy,
         thenBy: this.thenBy,
         orderByKey: this.orderByKey,
@@ -68,9 +68,9 @@ class RuntimeCollectionModel extends CollectionModel<DataCollection> {
   Future append(
       {String id,
       Map<String, dynamic> data,
-      FutureOr builder(DataDocument document)}) async {
+      FutureOr builder(RuntimeDocument document)}) async {
     String path = Paths.child(this.path, id ?? Texts.uuid);
-    DataDocument state = DataDocument(path);
+    RuntimeDocument state = RuntimeDocument(path);
     if (data != null) {
       for (MapEntry<String, dynamic> tmp in data.entries) {
         if (isEmpty(tmp.key) || tmp.value == null) continue;

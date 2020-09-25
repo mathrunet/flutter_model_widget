@@ -1,3 +1,7 @@
+## [0.5.0] - Update README (2020.09.25)
+
+* Support in Masamune frameworks.
+
 ## [0.4.1] - Update README (2020.09.25)
 
 * [useCollection] and [useDocument] are available.

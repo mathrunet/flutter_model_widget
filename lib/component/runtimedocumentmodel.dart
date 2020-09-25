@@ -36,7 +36,7 @@ part of flutter_widget_model;
 ///   );
 /// }
 /// ```
-class RuntimeDocumentModel extends DocumentModel<DataDocument> {
+class RuntimeDocumentModel extends DocumentModel<RuntimeDocument> {
   /// Value to be set in the data document.
   final Map<String, dynamic> data;
 
@@ -47,8 +47,8 @@ class RuntimeDocumentModel extends DocumentModel<DataDocument> {
   /// If [data] is specified, [data] will be set to the specified [path].
   RuntimeDocumentModel(String path, {this.data}) : super(path);
   @override
-  FutureOr<DataDocument> build(ModelContext context) {
-    if (this.data == null) return DataDocument(this.path);
-    return DataDocument.fromMap(this.path, this.data);
+  FutureOr<RuntimeDocument> build(ModelContext context) {
+    if (this.data == null) return RuntimeDocument(this.path);
+    return RuntimeDocument.fromMap(this.path, this.data);
   }
 }
