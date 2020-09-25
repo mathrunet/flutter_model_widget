@@ -17,7 +17,8 @@ part of flutter_widget_model;
 ///
 /// In the [build] method of a widget, you can use [map] or [expand] in combination with [ListView], [Column], [Row] and other widgets to create a more visible structure.
 abstract class CollectionModel<T extends IDataCollection> extends Model<T>
-    with CollectionModelMixin<T>, IterableMixin<IDataDocument> {
+    with CollectionModelMixin<T>, IterableMixin<IDataDocument>
+    implements Iterable<IDataDocument> {
   /// Create a data model that treats the data as a collection.
   ///
   /// By specifying [path], you can get data from [PathMap] as well, and you can get the data even outside of the build timing.

@@ -2,7 +2,7 @@ name: flutter_widget_model
 description: >-
   Package that allows you to treat your models like widgets.
   Used with [flutter_hooks].
-version: 0.4.0+2
+version: 0.4.0+3
 homepage: https://mathru.net
 repository: https://github.com/mathrunet/flutter_widget_model
 

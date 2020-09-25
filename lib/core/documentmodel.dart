@@ -17,7 +17,8 @@ part of flutter_widget_model;
 ///
 /// You can use the [save] method to save the data you have stored in the document.
 abstract class DocumentModel<T extends IDataDocument> extends Model<T>
-    with DocumentModelMixin<T>, MapMixin {
+    with DocumentModelMixin<T>, MapMixin<String, IDataField>
+    implements Map<String, IDataField> {
   /// Create a data model that treats the data as a document.
   ///
   /// By specifying [path], you can get data from [PathMap] as well, and you can get the data even outside of the build timing.
@@ -25,7 +26,7 @@ abstract class DocumentModel<T extends IDataDocument> extends Model<T>
 
   /// Get the value corresponding to [key] from the document.
   @override
-  dynamic operator [](Object key) {
+  IDataField operator [](Object key) {
     T state = this.state;
     if (state == null) return null;
     return state[key];
@@ -49,7 +50,7 @@ abstract class DocumentModel<T extends IDataDocument> extends Model<T>
 
   /// Get a list of keys for the document.
   @override
-  Iterable get keys {
+  Iterable<String> get keys {
     T state = this.state;
     if (state == null) return [];
     return state.keys;
@@ -57,10 +58,12 @@ abstract class DocumentModel<T extends IDataDocument> extends Model<T>
 
   /// Removes the value corresponding to [key] from the document.
   @override
-  void remove(Object key) {
+  IDataField remove(Object key) {
     T state = this.state;
-    if (state == null) return;
+    if (state == null || !state.containsKey(key)) return null;
+    IDataField field = state[key];
     state.remove(key);
+    return field;
   }
 }
 
