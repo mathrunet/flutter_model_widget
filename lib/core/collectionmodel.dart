@@ -19,10 +19,24 @@ part of flutter_widget_model;
 abstract class CollectionModel<T extends IDataCollection> extends Model<T>
     with CollectionModelMixin<T>, IterableMixin<IDataDocument>
     implements Iterable<IDataDocument> {
+  final OrderBy orderBy;
+  final OrderBy thenBy;
+  final String orderByKey;
+  final String thenByKey;
+
   /// Create a data model that treats the data as a collection.
   ///
   /// By specifying [path], you can get data from [PathMap] as well, and you can get the data even outside of the build timing.
-  CollectionModel([String path]) : super(path);
+  ///
+  /// You can sort by specifying [orderBy], [orderByKey].
+  /// You can also specify [thenBy] and [thenByKey] to further sort the elements in the same order in the first sort.
+  CollectionModel(
+      [String path,
+      this.orderBy = OrderBy.none,
+      this.orderByKey,
+      this.thenBy = OrderBy.none,
+      this.thenByKey])
+      : super(path);
 
   /// Get the iterator of the collection.
   @override
@@ -42,5 +56,26 @@ abstract class CollectionModelMixin<T extends IDataCollection>
     T state = this.state;
     if (state == null) return;
     await state[key]?.delete();
+  }
+
+  /// Reload the collection data.
+  Future reload() async {
+    T state = this.state;
+    if (state == null) return;
+    await state.reload();
+  }
+
+  /// Load the following data.
+  Future next() async {
+    T state = this.state;
+    if (state == null) return;
+    await state.next();
+  }
+
+  /// True if the following data is available.
+  bool canNext() {
+    T state = this.state;
+    if (state == null) return false;
+    return state.canNext();
   }
 }

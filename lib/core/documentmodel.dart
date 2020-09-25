@@ -101,6 +101,13 @@ abstract class DocumentModelMixin<T extends IDataDocument> implements Model<T> {
     await state.delete();
   }
 
+  /// Reload the document data.
+  Future reload() async {
+    T state = this.state;
+    if (state == null) return;
+    await state.reload();
+  }
+
   /// Get the value stored in the document by [key] as [bool].
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.

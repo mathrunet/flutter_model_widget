@@ -25,9 +25,11 @@ part 'core/model.dart';
 part 'core/fieldmodel.dart';
 part 'core/documentmodel.dart';
 part 'core/collectionmodel.dart';
+part 'core/documenthook.dart';
+part 'core/collectionhook.dart';
 
 part 'component/datafieldmodel.dart';
-part 'component/datadocumentmodel.dart';
-part 'component/datacollectionmodel.dart';
+part 'component/runtimedocumentmodel.dart';
+part 'component/runtimecollectionmodel.dart';
 part 'component/localdocumentmodel.dart';
 part 'component/localcollectionmodel.dart';

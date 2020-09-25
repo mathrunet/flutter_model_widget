@@ -1,6 +1,6 @@
 part of flutter_widget_model;
 
-/// Model for storing data in Key-Value-Pair document format.
+/// Model for storing data in Key-Value-Pair document format on runtime.
 ///
 /// ```
 /// Widget build(BuildContext context) {
@@ -36,16 +36,16 @@ part of flutter_widget_model;
 ///   );
 /// }
 /// ```
-class DataDocumentModel extends DocumentModel<DataDocument> {
+class RuntimeDocumentModel extends DocumentModel<DataDocument> {
   /// Value to be set in the data document.
   final Map<String, dynamic> data;
 
-  /// Model for storing data in Key-Value-Pair document format.
+  /// Model for storing data in Key-Value-Pair document format on runtime.
   ///
   /// Defines the data document of the specified [path].
   ///
   /// If [data] is specified, [data] will be set to the specified [path].
-  DataDocumentModel(String path, [this.data]) : super(path);
+  RuntimeDocumentModel(String path, {this.data}) : super(path);
   @override
   FutureOr<DataDocument> build(ModelContext context) {
     if (this.data == null) return DataDocument(this.path);

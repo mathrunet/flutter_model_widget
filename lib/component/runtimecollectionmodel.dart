@@ -1,6 +1,6 @@
 part of flutter_widget_model;
 
-/// Data model with a data structure for collections.
+/// Data model with a data structure for collections on runtime.
 ///
 /// The contents of the collection store data documents and so on, including data that sequentially reads the stored data list as it is stored.
 ///
@@ -33,21 +33,31 @@ part of flutter_widget_model;
 ///   );
 /// }
 /// ```
-class DataCollectionModel extends CollectionModel<DataCollection> {
+class RuntimeCollectionModel extends CollectionModel<DataCollection> {
   final List<Map<String, dynamic>> data;
 
-  /// Data model with a data structure for collections.
+  /// Data model with a data structure for collections on runtime.
   ///
   /// The contents of the collection store data documents and so on, including data that sequentially reads the stored data list as it is stored.
   ///
   /// Defines the data document of the specified [path].
   ///
   /// If [data] is specified, [data] will be set to the specified [path].
-  DataCollectionModel(String path, [this.data]) : super(path);
+  RuntimeCollectionModel(String path,
+      {this.data,
+      OrderBy orderBy = OrderBy.none,
+      String orderByKey,
+      OrderBy thenBy = OrderBy.none,
+      String thenByKey})
+      : super(path, orderBy, orderByKey, thenBy, thenByKey);
   @override
   FutureOr<DataCollection> build(ModelContext context) {
     if (this.data == null) return DataCollection(this.path);
-    return DataCollection.fromList(this.path, this.data);
+    return DataCollection.fromList(this.path, this.data,
+        orderBy: this.orderBy,
+        thenBy: this.thenBy,
+        orderByKey: this.orderByKey,
+        thenByKey: this.thenByKey);
   }
 
   /// Add a new document to the collection.

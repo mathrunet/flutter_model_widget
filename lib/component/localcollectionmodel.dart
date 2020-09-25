@@ -47,10 +47,20 @@ class LocalCollectionModel extends CollectionModel<LocalCollection> {
   /// Even if the application is terminated, the data will be restored and available.
   ///
   /// Defines the data document of the specified [path].
-  LocalCollectionModel(String path, [this.data]) : super(path);
+  LocalCollectionModel(String path,
+      {this.data,
+      OrderBy orderBy = OrderBy.none,
+      String orderByKey,
+      OrderBy thenBy = OrderBy.none,
+      String thenByKey})
+      : super(path, orderBy, orderByKey, thenBy, thenByKey);
   @override
   FutureOr<LocalCollection> build(ModelContext context) {
-    return LocalCollection.load(this.path);
+    return LocalCollection.load(this.path,
+        orderBy: this.orderBy,
+        thenBy: this.thenBy,
+        orderByKey: this.orderByKey,
+        thenByKey: this.thenByKey);
   }
 
   /// Add a new document to the collection.
