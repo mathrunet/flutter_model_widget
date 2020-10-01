@@ -22,6 +22,7 @@ part of flutter_widget_model;
 ///   );
 /// }
 /// ```
+@immutable
 class DataFieldModel extends FieldModel<DataField> {
   /// Value to be set in the data field.
   final dynamic value;
@@ -31,9 +32,9 @@ class DataFieldModel extends FieldModel<DataField> {
   /// Defines the data field of the specified [path].
   ///
   /// If [value] is specified, [value] will be set to the specified [path].
-  DataFieldModel(String path, [this.value]) : super(path);
+  const DataFieldModel(String path, [this.value]) : super(path);
   @override
-  FutureOr<DataField> build(ModelContext context) {
+  DataField build() {
     if (this.value == null) return DataField(this.path);
     return DataField(this.path, this.value);
   }

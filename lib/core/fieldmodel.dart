@@ -14,21 +14,15 @@ part of flutter_widget_model;
 ///
 /// You can rewrite the value with [set], [increment], [decrement], etc., and get a value of the type with [getString], etc.
 /// You can also get the value by [dynamic] by specifying [value].
-abstract class FieldModel<T extends IDataField> extends Model<T>
-    with FieldModelMixin<T> {
+@immutable
+abstract class FieldModel<T extends IDataField> extends Model<T> {
+  final String path;
+
   /// Data model for storing single-shot data such as String, int, and double.
   ///
   /// By specifying [path], you can get data from [PathMap] as well, and you can get the data even outside of the build timing.
-  FieldModel([String path]) : super(path);
-}
+  const FieldModel(this.path) : super();
 
-/// Mix-in that adds the internal structure of the [FieldModel]
-///
-/// You can retrieve and rewrite the data inside by using the [FieldModel].
-///
-/// You can rewrite the value with [set], [increment], [decrement], etc., and get a value of the type with [getString], etc.
-/// You can also get the value by [dynamic] by specifying [value].
-abstract class FieldModelMixin<T extends IDataField> implements Model<T> {
   /// You can set and rewrite the data.
   ///
   /// You can pass any value you want to set to [value].

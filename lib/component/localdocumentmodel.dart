@@ -39,6 +39,7 @@ part of flutter_widget_model;
 ///   );
 /// }
 /// ```
+@immutable
 class LocalDocumentModel extends DocumentModel<LocalDocument> {
   /// Model for storing data in Key-Value-Pair document format.
   ///
@@ -46,9 +47,9 @@ class LocalDocumentModel extends DocumentModel<LocalDocument> {
   /// Even if the application is terminated, the data will be restored and available.
   ///
   /// Defines the data document of the specified [path].
-  LocalDocumentModel(String path) : super(path);
+  const LocalDocumentModel(String path) : super(path: path);
   @override
-  FutureOr<LocalDocument> build(ModelContext context) {
+  LocalDocument build() {
     return LocalDocument.load(this.path);
   }
 }

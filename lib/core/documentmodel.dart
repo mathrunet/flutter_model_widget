@@ -16,17 +16,19 @@ part of flutter_widget_model;
 /// You can specify [IDataField] for Value, and the content of the data is a value such as [String] or [int], but you can get it with the specified type by methods such as [getString].
 ///
 /// You can use the [save] method to save the data you have stored in the document.
-abstract class DocumentModel<T extends IDataDocument> extends Model<T>
-    with DocumentModelMixin<T>, MapMixin<String, IDataField>
-    implements Map<String, IDataField> {
+@immutable
+abstract class DocumentModel<T extends IDynamicalDataMap> extends Model<T>
+    implements IDynamicalDataMap {
+  final String path;
+
   /// Create a data model that treats the data as a document.
   ///
   /// By specifying [path], you can get data from [PathMap] as well, and you can get the data even outside of the build timing.
-  DocumentModel([String path]) : super(path);
+  const DocumentModel({this.path}) : super();
 
   /// Get the value corresponding to [key] from the document.
   @override
-  IDataField operator [](Object key) {
+  dynamic operator [](Object key) {
     T state = this.state;
     if (state == null) return null;
     return state[key];
@@ -40,40 +42,6 @@ abstract class DocumentModel<T extends IDataDocument> extends Model<T>
     state[key] = value;
   }
 
-  /// Clear the document.
-  @override
-  void clear() {
-    T state = this.state;
-    if (state == null) return;
-    state.clear();
-  }
-
-  /// Get a list of keys for the document.
-  @override
-  Iterable<String> get keys {
-    T state = this.state;
-    if (state == null) return [];
-    return state.keys;
-  }
-
-  /// Removes the value corresponding to [key] from the document.
-  @override
-  IDataField remove(Object key) {
-    T state = this.state;
-    if (state == null || !state.containsKey(key)) return null;
-    IDataField field = state[key];
-    state.remove(key);
-    return field;
-  }
-}
-
-/// Mix-in for handling document data.
-///
-/// Document is a data structure that works like a Key-Value-Pair [Map].
-/// You can specify [IDataField] for Value, and the content of the data is a value such as [String] or [int], but you can get it with the specified type by methods such as [getString].
-///
-/// You can use the [save] method to save the data you have stored in the document.
-abstract class DocumentModelMixin<T extends IDataDocument> implements Model<T> {
   /// Save the document data.
   ///
   /// The [data] is the value to be saved in the document. If the data exists in the current document, it will be overwritten.
@@ -89,7 +57,11 @@ abstract class DocumentModelMixin<T extends IDataDocument> implements Model<T> {
       }
     }
     if (builder != null) await builder(state);
-    await state.save();
+    if (state is IDataDocument) {
+      await state.save();
+    } else if (state is DocumentModel) {
+      await state.save();
+    }
   }
 
   /// Deletes the document data.
@@ -98,14 +70,22 @@ abstract class DocumentModelMixin<T extends IDataDocument> implements Model<T> {
   Future delete() async {
     T state = this.state;
     if (state == null) return;
-    await state.delete();
+    if (state is IDataDocument) {
+      await state.delete();
+    } else if (state is DocumentModel) {
+      await state.delete();
+    }
   }
 
   /// Reload the document data.
   Future reload() async {
     T state = this.state;
     if (state == null) return;
-    await state.reload();
+    if (state is IDataDocument) {
+      await state.reload();
+    } else if (state is DocumentModel) {
+      await state.reload();
+    }
   }
 
   /// Get the value stored in the document by [key] as [bool].
@@ -148,7 +128,7 @@ abstract class DocumentModelMixin<T extends IDataDocument> implements Model<T> {
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   List<V> getList<V extends Object>(String key,
-      [List defaultValue = const []]) {
+      [List<V> defaultValue = const []]) {
     T state = this.state;
     if (state == null) return defaultValue;
     return state.getList<V>(key, defaultValue);
@@ -158,9 +138,65 @@ abstract class DocumentModelMixin<T extends IDataDocument> implements Model<T> {
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   Map<K, V> getMap<K extends Object, V extends Object>(String key,
-      [Map defaultValue = const {}]) {
+      [Map<K, V> defaultValue = const {}]) {
     T state = this.state;
     if (state == null) return defaultValue;
     return state.getMap<K, V>(key, defaultValue);
+  }
+
+  /// Remove all data from the document.
+  @override
+  void clear() {
+    T state = this.state;
+    if (state == null) return;
+    state.clear();
+  }
+
+  /// Check if the document contains a key.
+  ///
+  /// True if key is included.
+  ///
+  /// [key]: Key to check.
+  @override
+  bool containsKey(String key) {
+    T state = this.state;
+    if (state == null) return false;
+    return state.containsKey(key);
+  }
+
+  /// Get the document key list.
+  @override
+  Iterable<String> get keys {
+    T state = this.state;
+    if (state == null) return const <String>[];
+    return state.keys;
+  }
+
+  /// Get number of documents.
+  @override
+  int get length {
+    T state = this.state;
+    if (state == null) return 0;
+    return state.length;
+  }
+
+  /// Remove data from document.
+  ///
+  /// [key]: Key to delete.
+  @override
+  void remove(String key) {
+    T state = this.state;
+    if (state == null) return;
+    state.remove(key);
+  }
+
+  /// Remove data from document.
+  ///
+  /// [keys]: Keys to delete.
+  @override
+  void removeAll(Iterable<String> keys) {
+    T state = this.state;
+    if (state == null) return;
+    state.removeAll(keys);
   }
 }

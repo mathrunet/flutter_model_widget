@@ -36,6 +36,7 @@ part of flutter_widget_model;
 ///   );
 /// }
 /// ```
+@immutable
 class LocalCollectionModel extends CollectionModel<LocalCollection> {
   final List<Map<String, dynamic>> data;
 
@@ -47,15 +48,21 @@ class LocalCollectionModel extends CollectionModel<LocalCollection> {
   /// Even if the application is terminated, the data will be restored and available.
   ///
   /// Defines the data document of the specified [path].
-  LocalCollectionModel(String path,
+  const LocalCollectionModel(String path,
       {this.data,
       OrderBy orderBy = OrderBy.none,
       String orderByKey,
       OrderBy thenBy = OrderBy.none,
       String thenByKey})
-      : super(path, orderBy, orderByKey, thenBy, thenByKey);
+      : super(
+            path: path,
+            orderBy: orderBy,
+            orderByKey: orderByKey,
+            thenBy: thenBy,
+            thenByKey: thenByKey);
   @override
-  FutureOr<LocalCollection> build(ModelContext context) {
+  @protected
+  LocalCollection build() {
     return LocalCollection.load(this.path,
         orderBy: this.orderBy,
         thenBy: this.thenBy,

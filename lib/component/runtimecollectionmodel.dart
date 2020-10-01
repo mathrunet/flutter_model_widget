@@ -33,6 +33,7 @@ part of flutter_widget_model;
 ///   );
 /// }
 /// ```
+@immutable
 class RuntimeCollectionModel extends CollectionModel<RuntimeCollection> {
   final List<Map<String, dynamic>> data;
 
@@ -43,15 +44,20 @@ class RuntimeCollectionModel extends CollectionModel<RuntimeCollection> {
   /// Defines the data document of the specified [path].
   ///
   /// If [data] is specified, [data] will be set to the specified [path].
-  RuntimeCollectionModel(String path,
+  const RuntimeCollectionModel(String path,
       {this.data,
       OrderBy orderBy = OrderBy.none,
       String orderByKey,
       OrderBy thenBy = OrderBy.none,
       String thenByKey})
-      : super(path, orderBy, orderByKey, thenBy, thenByKey);
+      : super(
+            path: path,
+            orderBy: orderBy,
+            orderByKey: orderByKey,
+            thenBy: thenBy,
+            thenByKey: thenByKey);
   @override
-  FutureOr<RuntimeCollection> build(ModelContext context) {
+  RuntimeCollection build() {
     if (this.data == null) return RuntimeCollection(this.path);
     return RuntimeCollection.fromList(this.path, this.data,
         orderBy: this.orderBy,

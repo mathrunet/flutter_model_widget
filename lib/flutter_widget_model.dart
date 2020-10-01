@@ -14,6 +14,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:masamune_core/masamune_core.dart';
 export 'package:masamune_core/masamune_core.dart';
 export 'package:flutter_hooks/flutter_hooks.dart';
@@ -27,9 +28,14 @@ part 'core/documentmodel.dart';
 part 'core/collectionmodel.dart';
 part 'core/documenthook.dart';
 part 'core/collectionhook.dart';
+part 'core/valuemodel.dart';
+part 'core/mapmodel.dart';
+part 'core/listmodel.dart';
 
 part 'component/datafieldmodel.dart';
 part 'component/runtimedocumentmodel.dart';
 part 'component/runtimecollectionmodel.dart';
 part 'component/localdocumentmodel.dart';
 part 'component/localcollectionmodel.dart';
+
+part 'widget/modelbuilder.dart';
