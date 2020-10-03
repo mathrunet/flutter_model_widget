@@ -14,11 +14,18 @@ abstract class MapModel<K extends Object, V extends Object>
   @protected
   Map<K, V> get state {
     try {
-      use(_ModelHook(this));
+      return this.build(
+            use(
+              _ModelHook(this),
+            ),
+          ) ??
+          this.initialValue;
     } on AssertionError {
-      this.createTask();
+      return this.build(
+            ModelContext._(),
+          ) ??
+          this.initialValue;
     }
-    return this.build() ?? this.initialValue;
   }
 
   /// Get the value corresponding to [key] from the document.

@@ -20,7 +20,6 @@ export 'package:masamune_core/masamune_core.dart';
 export 'package:flutter_hooks/flutter_hooks.dart';
 
 part 'core/modelhook.dart';
-part 'core/modelstate.dart';
 part 'core/modelcontext.dart';
 part 'core/model.dart';
 part 'core/fieldmodel.dart';

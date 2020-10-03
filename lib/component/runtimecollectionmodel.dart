@@ -57,13 +57,16 @@ class RuntimeCollectionModel extends CollectionModel<RuntimeCollection> {
             thenBy: thenBy,
             thenByKey: thenByKey);
   @override
-  RuntimeCollection build() {
+  RuntimeCollection build(ModelContext context) {
     if (this.data == null) return RuntimeCollection(this.path);
-    return RuntimeCollection.fromList(this.path, this.data,
-        orderBy: this.orderBy,
-        thenBy: this.thenBy,
-        orderByKey: this.orderByKey,
-        thenByKey: this.thenByKey);
+    return RuntimeCollection.fromList(
+      this.path,
+      this.data,
+      orderBy: this.orderBy,
+      thenBy: this.thenBy,
+      orderByKey: this.orderByKey,
+      thenByKey: this.thenByKey,
+    );
   }
 
   /// Add a new document to the collection.

@@ -49,7 +49,7 @@ class LocalDocumentModel extends DocumentModel<LocalDocument> {
   /// Defines the data document of the specified [path].
   const LocalDocumentModel(String path) : super(path: path);
   @override
-  LocalDocument build() {
+  LocalDocument build(ModelContext context) {
     return LocalDocument.load(this.path);
   }
 }

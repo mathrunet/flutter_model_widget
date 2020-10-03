@@ -62,12 +62,14 @@ class LocalCollectionModel extends CollectionModel<LocalCollection> {
             thenByKey: thenByKey);
   @override
   @protected
-  LocalCollection build() {
-    return LocalCollection.load(this.path,
-        orderBy: this.orderBy,
-        thenBy: this.thenBy,
-        orderByKey: this.orderByKey,
-        thenByKey: this.thenByKey);
+  LocalCollection build(ModelContext context) {
+    return LocalCollection.load(
+      this.path,
+      orderBy: this.orderBy,
+      thenBy: this.thenBy,
+      orderByKey: this.orderByKey,
+      thenByKey: this.thenByKey,
+    );
   }
 
   /// Add a new document to the collection.

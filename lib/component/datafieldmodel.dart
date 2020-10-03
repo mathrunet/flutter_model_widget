@@ -34,7 +34,7 @@ class DataFieldModel extends FieldModel<DataField> {
   /// If [value] is specified, [value] will be set to the specified [path].
   const DataFieldModel(String path, [this.value]) : super(path);
   @override
-  DataField build() {
+  DataField build(ModelContext context) {
     if (this.value == null) return DataField(this.path);
     return DataField(this.path, this.value);
   }

@@ -18,15 +18,16 @@ abstract class Model<T extends Object> {
   ///
   /// You can return [T] to reflect the data in it in the model.
   @protected
-  T build();
+  T build(ModelContext context);
 
   /// If you have asynchronous tasks, define them here.
   ///
-  /// Return a type of [Future<IPath>].
-  /// Then the object is registered in [PathMap] and
-  /// can be retrieved with the [build] method.
+  /// Return a type of [Future].
+  ///
+  /// For ease of retrieval,
+  /// you may want to store the values retrieved by the task in a separate location while creating this task.
   @protected
-  Future<IPath> createTask() => null;
+  Future createTask() => null;
 
   /// Retrieve the data obtained from the model.
   ///
@@ -34,10 +35,16 @@ abstract class Model<T extends Object> {
   @protected
   T get state {
     try {
-      use(_ModelHook(this));
+      return this.build(
+        use(
+          _ModelHook(this),
+        ),
+      );
     } on AssertionError {
       this.createTask();
+      return this.build(
+        ModelContext._(),
+      );
     }
-    return this.build();
   }
 }

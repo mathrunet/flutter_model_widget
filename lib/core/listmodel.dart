@@ -15,11 +15,18 @@ abstract class ListModel<T extends Object> extends Model<Iterable<T>>
   @protected
   Iterable<T> get state {
     try {
-      use(_ModelHook(this));
+      return this.build(
+            use(
+              _ModelHook(this),
+            ),
+          ) ??
+          this.initialValue;
     } on AssertionError {
-      this.createTask();
+      return this.build(
+            ModelContext._(),
+          ) ??
+          this.initialValue;
     }
-    return this.build() ?? this.initialValue;
   }
 
   /// Get the iterator of the collection.

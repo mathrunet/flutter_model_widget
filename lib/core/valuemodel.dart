@@ -13,10 +13,17 @@ abstract class ValueModel<T extends Object> extends Model<T> {
   @protected
   T get state {
     try {
-      use(_ModelHook(this));
+      return this.build(
+            use(
+              _ModelHook(this),
+            ),
+          ) ??
+          this.initialValue;
     } on AssertionError {
-      this.createTask();
+      return this.build(
+            ModelContext._(),
+          ) ??
+          this.initialValue;
     }
-    return this.build() ?? this.initialValue;
   }
 }

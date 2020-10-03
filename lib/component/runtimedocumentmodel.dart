@@ -48,7 +48,7 @@ class RuntimeDocumentModel extends DocumentModel<RuntimeDocument> {
   /// If [data] is specified, [data] will be set to the specified [path].
   const RuntimeDocumentModel(String path, {this.data}) : super(path: path);
   @override
-  RuntimeDocument build() {
+  RuntimeDocument build(ModelContext context) {
     if (this.data == null) return RuntimeDocument(this.path);
     return RuntimeDocument.fromMap(this.path, this.data);
   }
