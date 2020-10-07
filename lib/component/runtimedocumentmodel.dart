@@ -36,7 +36,6 @@ part of flutter_widget_model;
 ///   );
 /// }
 /// ```
-@immutable
 class RuntimeDocumentModel extends DocumentModel<RuntimeDocument> {
   /// Value to be set in the data document.
   final Map<String, dynamic> data;
@@ -46,7 +45,7 @@ class RuntimeDocumentModel extends DocumentModel<RuntimeDocument> {
   /// Defines the data document of the specified [path].
   ///
   /// If [data] is specified, [data] will be set to the specified [path].
-  const RuntimeDocumentModel(String path, {this.data}) : super(path: path);
+  RuntimeDocumentModel(String path, {this.data}) : super(path: path);
   @override
   RuntimeDocument build(ModelContext context) {
     if (this.data == null) return RuntimeDocument(this.path);

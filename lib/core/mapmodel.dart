@@ -1,10 +1,9 @@
 part of flutter_widget_model;
 
-@immutable
 abstract class MapModel<K extends Object, V extends Object>
     extends Model<Map<K, V>> with MapMixin<K, V> implements Map<K, V> {
   final Map<K, V> initialValue;
-  const MapModel([Map<K, V> initialValue = const {}])
+  MapModel([Map<K, V> initialValue = const {}])
       : this.initialValue = initialValue,
         super();
 
@@ -12,21 +11,8 @@ abstract class MapModel<K extends Object, V extends Object>
   ///
   /// Normally, you will get the data from the [build] method.
   @protected
-  Map<K, V> get state {
-    try {
-      return this.build(
-            use(
-              _ModelHook(this),
-            ),
-          ) ??
-          this.initialValue;
-    } on AssertionError {
-      return this.build(
-            ModelContext._(),
-          ) ??
-          this.initialValue;
-    }
-  }
+  @override
+  Map<K, V> get state => this._state ?? this.initialValue;
 
   /// Get the value corresponding to [key] from the document.
   @override

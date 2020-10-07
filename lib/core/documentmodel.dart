@@ -16,15 +16,35 @@ part of flutter_widget_model;
 /// You can specify [IDataField] for Value, and the content of the data is a value such as [String] or [int], but you can get it with the specified type by methods such as [getString].
 ///
 /// You can use the [save] method to save the data you have stored in the document.
-@immutable
-abstract class DocumentModel<T extends IDynamicalDataMap> extends Model<T>
-    implements IDynamicalDataMap {
+abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
+    implements IDynamicDocument {
   final String path;
+
+  @override
+  void addListener(T value, Function(dynamic value) listen) {
+    if (value is IDataDocument) value.listen(listen);
+  }
+
+  @override
+  void removeListener(T value, Function(dynamic value) listen) {
+    if (value is IDataDocument) value.unlisten(listen);
+  }
+
+  /// Get the UID of the document.
+  ///
+  /// If there is no value in the field, id will be output.
+  String get uid => this.getString(Const.uid);
+
+  /// Get time.
+  ///
+  /// UpdatedTime is output if the field has no value.
+  int get time =>
+      this.getInt(Const.time, DateTime.now().millisecondsSinceEpoch);
 
   /// Create a data model that treats the data as a document.
   ///
   /// By specifying [path], you can get data from [PathMap] as well, and you can get the data even outside of the build timing.
-  const DocumentModel({this.path}) : super();
+  DocumentModel({this.path}) : super();
 
   /// Get the value corresponding to [key] from the document.
   @override

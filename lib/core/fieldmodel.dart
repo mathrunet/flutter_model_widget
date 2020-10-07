@@ -14,14 +14,23 @@ part of flutter_widget_model;
 ///
 /// You can rewrite the value with [set], [increment], [decrement], etc., and get a value of the type with [getString], etc.
 /// You can also get the value by [dynamic] by specifying [value].
-@immutable
 abstract class FieldModel<T extends IDataField> extends Model<T> {
   final String path;
+
+  @override
+  void addListener(T value, Function(dynamic value) listen) {
+    if (value is IDataField) value.listen(listen);
+  }
+
+  @override
+  void removeListener(T value, Function(dynamic value) listen) {
+    if (value is IDataField) value.unlisten(listen);
+  }
 
   /// Data model for storing single-shot data such as String, int, and double.
   ///
   /// By specifying [path], you can get data from [PathMap] as well, and you can get the data even outside of the build timing.
-  const FieldModel(this.path) : super();
+  FieldModel(this.path) : super();
 
   /// You can set and rewrite the data.
   ///

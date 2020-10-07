@@ -1,64 +1,52 @@
 part of flutter_widget_model;
 
-class _ModelHook extends Hook<ModelContext> {
-  const _ModelHook(this.model);
+class _ModelHook<Created extends Object> extends Hook<Created> {
+  const _ModelHook(this.model, this.initialValue);
 
-  final Model model;
+  final Model<Created> model;
+  final Created initialValue;
 
   @override
-  _ModelHookState createState() => _ModelHookState(this.model);
+  _ModelHookState<Created> createState() =>
+      _ModelHookState<Created>(this.model);
 }
 
-class _ModelHookState extends HookState<ModelContext, _ModelHook> {
-  final ModelContext _context;
-  _ModelHookState(Model model) : this._context = ModelContext._();
+class _ModelHookState<Created extends Object>
+    extends HookState<Created, _ModelHook<Created>> {
+  Created _state;
+  _ModelHookState(Model<Created> model);
   @override
   void initHook() {
     super.initHook();
     this._update();
   }
 
-  @override
-  void didUpdateHook(_ModelHook oldHook) {
-    super.didUpdateHook(oldHook);
-    if (oldHook != hook && oldHook.model != hook.model) {
-      this._update();
-    }
-  }
-
   void _update() {
-    Future future = hook.model?.createTask();
-    future?.then(
-      (value) {
-        _context?._subscription?.cancel();
-        _context?._path?.unlisten(this._listener);
-        if (value is IPath) {
-          _context._path = value.listen(this._listener);
-        } else if (value is Stream) {
-          _context._subscription = value.listen(this._listener);
-        }
-      },
-    );
+    this._listener(hook.initialValue);
+    Future<Created> future = hook.model.createTask(hook.model.context);
+    if (future == null) return;
+    future.then(this._listener);
   }
 
   @override
   void dispose() {
-    _context?._path?.unlisten(this._listener);
-    _context?._subscription?.cancel();
+    hook.model?.removeListener(this._state, this._listener);
     super.dispose();
   }
 
   @override
-  ModelContext build(BuildContext context) {
-    return _context;
+  Created build(BuildContext context) {
+    return this._state;
   }
 
   void _listener(dynamic value) {
+    this._state = value;
+    hook.model?.addListener(this._state, this._listener);
     setState(() {});
   }
 
   @override
-  Object get debugValue => _context;
+  Object get debugValue => _state;
 
   @override
   String get debugLabel => 'usePath';

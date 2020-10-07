@@ -7,10 +7,24 @@ part of flutter_widget_model;
 /// [FieldModel], [DocumentModel] and [CollectionModel] are usually used depending on the data structure to be used.
 ///
 /// If you want to use your newly created data structures, you may want to extend this class to create your own models.
-@immutable
-abstract class Model<T extends Object> {
+abstract class Model<Created extends Object> {
+  final ModelContext context = ModelContext._();
+  Created _state;
+
   /// The base class of the model.
-  const Model();
+  Model() {
+    final state = this.build(context);
+    try {
+      this._state = use(
+        _ModelHook<Created>(
+          this,
+          state,
+        ),
+      );
+    } on AssertionError {
+      this._state = state;
+    }
+  }
 
   /// Build the model.
   ///
@@ -18,7 +32,7 @@ abstract class Model<T extends Object> {
   ///
   /// You can return [T] to reflect the data in it in the model.
   @protected
-  T build(ModelContext context);
+  Created build(ModelContext context);
 
   /// If you have asynchronous tasks, define them here.
   ///
@@ -27,24 +41,17 @@ abstract class Model<T extends Object> {
   /// For ease of retrieval,
   /// you may want to store the values retrieved by the task in a separate location while creating this task.
   @protected
-  Future createTask() => null;
+  Future<Created> createTask(ModelContext context) => null;
+
+  @protected
+  void addListener(Created value, Function(dynamic value) listen) {}
+
+  @protected
+  void removeListener(Created value, Function(dynamic value) listen) {}
 
   /// Retrieve the data obtained from the model.
   ///
   /// Normally, you will get the data from the [build] method.
   @protected
-  T get state {
-    try {
-      return this.build(
-        use(
-          _ModelHook(this),
-        ),
-      );
-    } on AssertionError {
-      this.createTask();
-      return this.build(
-        ModelContext._(),
-      );
-    }
-  }
+  Created get state => this._state;
 }

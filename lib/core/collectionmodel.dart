@@ -16,16 +16,26 @@ part of flutter_widget_model;
 /// Basically, you can use [for] statements and various [Iterable] methods to retrieve data.
 ///
 /// In the [build] method of a widget, you can use [map] or [expand] in combination with [ListView], [Column], [Row] and other widgets to create a more visible structure.
-@immutable
-abstract class CollectionModel<T extends Iterable<IDataDocument>>
-    extends Model<T>
-    with IterableMixin<IDataDocument>
-    implements Iterable<IDataDocument> {
+abstract class CollectionModel<T extends IDynamicCollection> extends Model<T>
+    with IterableMixin<IDynamicDocument>
+    implements
+        Iterable<IDynamicDocument>,
+        IDynamicCollection<IDynamicDocument> {
   final String path;
   final OrderBy orderBy;
   final OrderBy thenBy;
   final String orderByKey;
   final String thenByKey;
+
+  @override
+  void addListener(T value, Function(dynamic value) listen) {
+    if (value is IDataCollection) value.listen(listen);
+  }
+
+  @override
+  void removeListener(T value, Function(dynamic value) listen) {
+    if (value is IDataCollection) value.unlisten(listen);
+  }
 
   /// Create a data model that treats the data as a collection.
   ///
@@ -33,7 +43,7 @@ abstract class CollectionModel<T extends Iterable<IDataDocument>>
   ///
   /// You can sort by specifying [orderBy], [orderByKey].
   /// You can also specify [thenBy] and [thenByKey] to further sort the elements in the same order in the first sort.
-  const CollectionModel(
+  CollectionModel(
       {this.path,
       this.orderBy = OrderBy.none,
       this.orderByKey,

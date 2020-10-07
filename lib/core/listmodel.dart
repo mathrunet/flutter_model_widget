@@ -1,11 +1,10 @@
 part of flutter_widget_model;
 
-@immutable
 abstract class ListModel<T extends Object> extends Model<Iterable<T>>
     with IterableMixin<T>
     implements Iterable<T> {
   final Iterable<T> initialValue;
-  const ListModel([Iterable<T> initialValue = const []])
+  ListModel([Iterable<T> initialValue = const []])
       : this.initialValue = initialValue,
         super();
 
@@ -13,21 +12,8 @@ abstract class ListModel<T extends Object> extends Model<Iterable<T>>
   ///
   /// Normally, you will get the data from the [build] method.
   @protected
-  Iterable<T> get state {
-    try {
-      return this.build(
-            use(
-              _ModelHook(this),
-            ),
-          ) ??
-          this.initialValue;
-    } on AssertionError {
-      return this.build(
-            ModelContext._(),
-          ) ??
-          this.initialValue;
-    }
-  }
+  @override
+  Iterable<T> get state => this._state ?? this.initialValue;
 
   /// Get the iterator of the collection.
   @override
