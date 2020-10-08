@@ -14,23 +14,15 @@ part of flutter_widget_model;
 ///
 /// You can rewrite the value with [set], [increment], [decrement], etc., and get a value of the type with [getString], etc.
 /// You can also get the value by [dynamic] by specifying [value].
-abstract class FieldModel<T extends IDataField> extends Model<T> {
-  final String path;
-
-  @override
-  void addListener(T value, Function(dynamic value) listen) {
-    if (value is IDataField) value.listen(listen);
-  }
-
-  @override
-  void removeListener(T value, Function(dynamic value) listen) {
-    if (value is IDataField) value.unlisten(listen);
-  }
-
+@immutable
+abstract class FieldModel<TField extends IDataField> extends Model<TField>
+    with PathModelMixin<TField>, ClonableModelMixin<TField>
+    implements IDataField {
   /// Data model for storing single-shot data such as String, int, and double.
   ///
   /// By specifying [path], you can get data from [PathMap] as well, and you can get the data even outside of the build timing.
-  FieldModel(this.path) : super();
+  @mustCallSuper
+  const FieldModel(String path) : super(path);
 
   /// You can set and rewrite the data.
   ///
@@ -38,7 +30,7 @@ abstract class FieldModel<T extends IDataField> extends Model<T> {
   ///
   /// It is possible to set a new value by specifying a separate [builder] to use the initial value, or if it already exists, to use that value.
   void set(dynamic value, [dynamic builder(dynamic value)]) {
-    T state = this.state;
+    TField state = this.state;
     if (builder == null) {
       if (state == null) {
         DataField(this.path, value);
@@ -57,7 +49,7 @@ abstract class FieldModel<T extends IDataField> extends Model<T> {
   /// If the value of a field is numeric, you can increase its value by [value].
   void increment([num value = 1]) {
     if (value == null) return;
-    T state = this.state;
+    TField state = this.state;
     if (state == null) {
       DataField(this.path, value);
     } else {
@@ -69,7 +61,7 @@ abstract class FieldModel<T extends IDataField> extends Model<T> {
   /// If the value of a field is numeric, you can decrease its value by [value].
   void decrement([num value = 1]) {
     if (value == null) return;
-    T state = this.state;
+    TField state = this.state;
     if (state == null) {
       DataField(this.path, -value);
     } else {
@@ -80,14 +72,14 @@ abstract class FieldModel<T extends IDataField> extends Model<T> {
 
   /// Get the data set in the field.
   dynamic get value {
-    T state = this.state;
+    TField state = this.state;
     if (state == null) return null;
     return state.data;
   }
 
   /// Set the specified [value] in the field.
   set value(dynamic value) {
-    T state = this.state;
+    TField state = this.state;
     if (state == null) return;
     state.data = value;
   }
@@ -96,7 +88,7 @@ abstract class FieldModel<T extends IDataField> extends Model<T> {
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   bool getBool([bool defaultValue = false]) {
-    T state = this.state;
+    TField state = this.state;
     if (state == null) return defaultValue;
     return state.getBool(defaultValue);
   }
@@ -105,7 +97,7 @@ abstract class FieldModel<T extends IDataField> extends Model<T> {
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   int getInt([int defaultValue = 0]) {
-    T state = this.state;
+    TField state = this.state;
     if (state == null) return defaultValue;
     return state.getInt(defaultValue);
   }
@@ -114,7 +106,7 @@ abstract class FieldModel<T extends IDataField> extends Model<T> {
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   double getDouble([double defaultValue = 0]) {
-    T state = this.state;
+    TField state = this.state;
     if (state == null) return defaultValue;
     return state.getDouble(defaultValue);
   }
@@ -123,7 +115,7 @@ abstract class FieldModel<T extends IDataField> extends Model<T> {
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   String getString([String defaultValue = ""]) {
-    T state = this.state;
+    TField state = this.state;
     if (state == null) return defaultValue;
     return state.getString(defaultValue);
   }
@@ -132,7 +124,7 @@ abstract class FieldModel<T extends IDataField> extends Model<T> {
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   List<V> getList<V extends Object>([List defaultValue = const []]) {
-    T state = this.state;
+    TField state = this.state;
     if (state == null) return defaultValue;
     return state.getList<V>(defaultValue);
   }
@@ -142,8 +134,66 @@ abstract class FieldModel<T extends IDataField> extends Model<T> {
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   Map<K, V> getMap<K extends Object, V extends Object>(
       [Map defaultValue = const {}]) {
-    T state = this.state;
+    TField state = this.state;
     if (state == null) return defaultValue;
     return state.getMap<K, V>(defaultValue);
+  }
+
+  @override
+  Object get data {
+    TField state = this.state;
+    if (state == null) return null;
+    return state.data;
+  }
+
+  @override
+  set data(Object data) {
+    TField state = this.state;
+    if (state == null) return;
+    state.data = data;
+  }
+
+  @override
+  operator [](String path) {
+    TField state = this.state;
+    if (state == null) return null;
+    return state[path];
+  }
+
+  @override
+  T debug<T extends IDebuggable>([Object value]) {
+    TField state = this.state;
+    if (state == null) return null;
+    return state.debug(value);
+  }
+
+  @override
+  @protected
+  void setInternal(Object value) {
+    TField state = this.state;
+    if (state == null) return;
+    state.setInternal(value);
+  }
+
+  @override
+  void unsetInternal() {
+    TField state = this.state;
+    if (state == null) return;
+    state.unsetInternal();
+  }
+
+  @override
+  bool get isLock {
+    TField state = this.state;
+    if (state == null) return null;
+    return state.isLock;
+  }
+
+  @override
+  @protected
+  Object get rawData {
+    TField state = this.state;
+    if (state == null) return null;
+    return state.rawData;
   }
 }

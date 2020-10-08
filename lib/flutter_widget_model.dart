@@ -22,14 +22,13 @@ export 'package:flutter_hooks/flutter_hooks.dart';
 part 'core/modelhook.dart';
 part 'core/modelcontext.dart';
 part 'core/model.dart';
+part 'core/pathmodelmixin.dart';
 part 'core/fieldmodel.dart';
 part 'core/documentmodel.dart';
 part 'core/collectionmodel.dart';
 part 'core/documenthook.dart';
 part 'core/collectionhook.dart';
-part 'core/valuemodel.dart';
-part 'core/mapmodel.dart';
-part 'core/listmodel.dart';
+part 'core/pathhook.dart';
 
 part 'component/datafieldmodel.dart';
 part 'component/runtimedocumentmodel.dart';

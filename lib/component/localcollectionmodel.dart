@@ -37,8 +37,6 @@ part of flutter_widget_model;
 /// }
 /// ```
 class LocalCollectionModel extends CollectionModel<LocalCollection> {
-  final List<Map<String, dynamic>> data;
-
   /// Data model with a data structure for collections.
   ///
   /// The contents of the collection store data documents and so on, including data that sequentially reads the stored data list as it is stored.
@@ -47,14 +45,12 @@ class LocalCollectionModel extends CollectionModel<LocalCollection> {
   /// Even if the application is terminated, the data will be restored and available.
   ///
   /// Defines the data document of the specified [path].
-  LocalCollectionModel(String path,
-      {this.data,
-      OrderBy orderBy = OrderBy.none,
+  const LocalCollectionModel(String path,
+      {OrderBy orderBy = OrderBy.none,
       String orderByKey,
       OrderBy thenBy = OrderBy.none,
       String thenByKey})
-      : super(
-            path: path,
+      : super(path,
             orderBy: orderBy,
             orderByKey: orderByKey,
             thenBy: thenBy,

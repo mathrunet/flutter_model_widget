@@ -16,20 +16,11 @@ part of flutter_widget_model;
 /// You can specify [IDataField] for Value, and the content of the data is a value such as [String] or [int], but you can get it with the specified type by methods such as [getString].
 ///
 /// You can use the [save] method to save the data you have stored in the document.
-abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
-    implements IDynamicDocument {
-  final String path;
-
-  @override
-  void addListener(T value, Function(dynamic value) listen) {
-    if (value is IDataDocument) value.listen(listen);
-  }
-
-  @override
-  void removeListener(T value, Function(dynamic value) listen) {
-    if (value is IDataDocument) value.unlisten(listen);
-  }
-
+@immutable
+abstract class DocumentModel<TDocument extends IDataDocument>
+    extends Model<TDocument>
+    with PathModelMixin<TDocument>, ClonableModelMixin<TDocument>
+    implements IDataDocument {
   /// Get the UID of the document.
   ///
   /// If there is no value in the field, id will be output.
@@ -44,20 +35,18 @@ abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
   /// Create a data model that treats the data as a document.
   ///
   /// By specifying [path], you can get data from [PathMap] as well, and you can get the data even outside of the build timing.
-  DocumentModel({this.path}) : super();
+  const DocumentModel(String path) : super(path);
 
   /// Get the value corresponding to [key] from the document.
-  @override
   dynamic operator [](Object key) {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return null;
     return state[key];
   }
 
   /// Pass [value] to [key] in the document.
-  @override
   void operator []=(key, value) {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return;
     state[key] = value;
   }
@@ -67,28 +56,17 @@ abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
   /// The [data] is the value to be saved in the document. If the data exists in the current document, it will be overwritten.
   ///
   /// The [builder] can handle the document as it is after the data is saved.
-  Future save({Map<String, dynamic> data, FutureOr builder(T document)}) async {
-    T state = this.state;
-    if (state == null) return;
-    if (data != null) {
-      for (MapEntry<String, dynamic> tmp in data.entries) {
-        if (isEmpty(tmp.key) || tmp.value == null) continue;
-        state[tmp.key] = tmp.value;
-      }
-    }
-    if (builder != null) await builder(state);
-    if (state is IDataDocument) {
-      await state.save();
-    } else if (state is DocumentModel) {
-      await state.save();
-    }
+  Future<T> save<T extends IDataDocument>() {
+    TDocument state = this.state;
+    if (state == null) return Future.delayed(Duration.zero);
+    return state.save<T>();
   }
 
   /// Deletes the document data.
   ///
   /// Include and delete documents that have data on the server.
   Future delete() async {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return;
     if (state is IDataDocument) {
       await state.delete();
@@ -98,21 +76,17 @@ abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
   }
 
   /// Reload the document data.
-  Future reload() async {
-    T state = this.state;
-    if (state == null) return;
-    if (state is IDataDocument) {
-      await state.reload();
-    } else if (state is DocumentModel) {
-      await state.reload();
-    }
+  Future<T> reload<T extends IDataDocument>() {
+    TDocument state = this.state;
+    if (state == null) return Future.delayed(Duration.zero);
+    return state.reload<T>();
   }
 
   /// Get the value stored in the document by [key] as [bool].
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   bool getBool(String key, [bool defaultValue = false]) {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return defaultValue;
     return state.getBool(key, defaultValue);
   }
@@ -121,7 +95,7 @@ abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   int getInt(String key, [int defaultValue = 0]) {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return defaultValue;
     return state.getInt(key, defaultValue);
   }
@@ -130,7 +104,7 @@ abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   double getDouble(String key, [double defaultValue = 0]) {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return defaultValue;
     return state.getDouble(key, defaultValue);
   }
@@ -139,7 +113,7 @@ abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
   ///
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   String getString(String key, [String defaultValue = ""]) {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return defaultValue;
     return state.getString(key, defaultValue);
   }
@@ -149,7 +123,7 @@ abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   List<V> getList<V extends Object>(String key,
       [List<V> defaultValue = const []]) {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return defaultValue;
     return state.getList<V>(key, defaultValue);
   }
@@ -159,15 +133,14 @@ abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
   /// You can pass an initial value to [defaultValue] if the data does not exist.
   Map<K, V> getMap<K extends Object, V extends Object>(String key,
       [Map<K, V> defaultValue = const {}]) {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return defaultValue;
     return state.getMap<K, V>(key, defaultValue);
   }
 
   /// Remove all data from the document.
-  @override
   void clear() {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return;
     state.clear();
   }
@@ -177,9 +150,8 @@ abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
   /// True if key is included.
   ///
   /// [key]: Key to check.
-  @override
   bool containsKey(String key) {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return false;
     return state.containsKey(key);
   }
@@ -187,15 +159,21 @@ abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
   /// Get the document key list.
   @override
   Iterable<String> get keys {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return const <String>[];
     return state.keys;
   }
 
-  /// Get number of documents.
   @override
+  Iterable<IDataField> get values {
+    TDocument state = this.state;
+    if (state == null) return <IDataField>[];
+    return state.values;
+  }
+
+  /// Get number of documents.
   int get length {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return 0;
     return state.length;
   }
@@ -203,9 +181,8 @@ abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
   /// Remove data from document.
   ///
   /// [key]: Key to delete.
-  @override
   void remove(String key) {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return;
     state.remove(key);
   }
@@ -213,10 +190,96 @@ abstract class DocumentModel<T extends IDynamicDocument> extends Model<T>
   /// Remove data from document.
   ///
   /// [keys]: Keys to delete.
-  @override
   void removeAll(Iterable<String> keys) {
-    T state = this.state;
+    TDocument state = this.state;
     if (state == null) return;
     state.removeAll(keys);
+  }
+
+  @override
+  void add(IDataField child) {
+    TDocument state = this.state;
+    if (state == null) return;
+    state.add(child);
+  }
+
+  @override
+  void addAll(Iterable<IDataField> children) {
+    TDocument state = this.state;
+    if (state == null) return;
+    state.addAll(children);
+  }
+
+  @override
+  @protected
+  SortedMap<String, IDataField> get data {
+    TDocument state = this.state;
+    if (state == null) return null;
+    return state.data;
+  }
+
+  @override
+  T debug<T extends IDebuggable>([Object value]) {
+    TDocument state = this.state;
+    if (state == null) return null;
+    return state.debug(value);
+  }
+
+  @override
+  Iterable<MapEntry<String, IDataField>> get entries {
+    TDocument state = this.state;
+    if (state == null) return <MapEntry<String, IDataField>>[];
+    return state.entries;
+  }
+
+  @override
+  void forEach(void Function(String key, IDataField value) function) {
+    TDocument state = this.state;
+    if (state == null) return;
+    return state.forEach(function);
+  }
+
+  @override
+  bool get isLock {
+    TDocument state = this.state;
+    if (state == null) return null;
+    return state.isLock;
+  }
+
+  @override
+  void removeWhere(bool Function(String key, IDataField child) predicate) {
+    TDocument state = this.state;
+    if (state == null) return;
+    state.removeWhere(predicate);
+  }
+
+  @override
+  @protected
+  void set(Iterable<IDataField> children) {
+    TDocument state = this.state;
+    if (state == null) return;
+    state.set(children);
+  }
+
+  @override
+  @protected
+  void setInternal(IDataField value) {
+    TDocument state = this.state;
+    if (state == null) return;
+    state.setInternal(value);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    TDocument state = this.state;
+    if (state == null) return <String, dynamic>{};
+    return state.toJson();
+  }
+
+  @override
+  void unsetInternal(IDataField value) {
+    TDocument state = this.state;
+    if (state == null) return;
+    state.unsetInternal(value);
   }
 }

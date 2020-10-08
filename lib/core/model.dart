@@ -7,24 +7,13 @@ part of flutter_widget_model;
 /// [FieldModel], [DocumentModel] and [CollectionModel] are usually used depending on the data structure to be used.
 ///
 /// If you want to use your newly created data structures, you may want to extend this class to create your own models.
-abstract class Model<Created extends Object> {
-  final ModelContext context = ModelContext._();
-  Created _state;
+@immutable
+abstract class Model<T extends IPath> {
+  final String path;
 
   /// The base class of the model.
-  Model() {
-    final state = this.build(context);
-    try {
-      this._state = use(
-        _ModelHook<Created>(
-          this,
-          state,
-        ),
-      );
-    } on AssertionError {
-      this._state = state;
-    }
-  }
+  @mustCallSuper
+  const Model(this.path) : assert(path != null, "You must specify the path.");
 
   /// Build the model.
   ///
@@ -32,26 +21,18 @@ abstract class Model<Created extends Object> {
   ///
   /// You can return [T] to reflect the data in it in the model.
   @protected
-  Created build(ModelContext context);
-
-  /// If you have asynchronous tasks, define them here.
-  ///
-  /// Return a type of [Future].
-  ///
-  /// For ease of retrieval,
-  /// you may want to store the values retrieved by the task in a separate location while creating this task.
-  @protected
-  Future<Created> createTask(ModelContext context) => null;
-
-  @protected
-  void addListener(Created value, Function(dynamic value) listen) {}
-
-  @protected
-  void removeListener(Created value, Function(dynamic value) listen) {}
+  FutureOr<T> build(ModelContext context);
 
   /// Retrieve the data obtained from the model.
   ///
   /// Normally, you will get the data from the [build] method.
   @protected
-  Created get state => this._state;
+  T get state {
+    try {
+      BuildContext context = useContext();
+      if (context == null) return PathMap.get<T>(this.path);
+      use(_ModelHook(this));
+    } on AssertionError {}
+    return PathMap.get<T>(this.path);
+  }
 }

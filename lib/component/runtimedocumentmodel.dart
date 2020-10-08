@@ -38,17 +38,19 @@ part of flutter_widget_model;
 /// ```
 class RuntimeDocumentModel extends DocumentModel<RuntimeDocument> {
   /// Value to be set in the data document.
-  final Map<String, dynamic> data;
+  final Map<String, dynamic> _data;
 
   /// Model for storing data in Key-Value-Pair document format on runtime.
   ///
   /// Defines the data document of the specified [path].
   ///
   /// If [data] is specified, [data] will be set to the specified [path].
-  RuntimeDocumentModel(String path, {this.data}) : super(path: path);
+  const RuntimeDocumentModel(String path, {Map<String, dynamic> data})
+      : this._data = data,
+        super(path);
   @override
   RuntimeDocument build(ModelContext context) {
-    if (this.data == null) return RuntimeDocument(this.path);
-    return RuntimeDocument.fromMap(this.path, this.data);
+    if (this._data == null) return RuntimeDocument(this.path);
+    return RuntimeDocument.fromMap(this.path, this._data);
   }
 }

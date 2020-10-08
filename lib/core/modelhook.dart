@@ -1,47 +1,58 @@
 part of flutter_widget_model;
 
-class _ModelHook<Created extends Object> extends Hook<Created> {
-  const _ModelHook(this.model, this.initialValue);
+class _ModelHook<T extends IPath> extends Hook<T> {
+  const _ModelHook(this.model);
 
-  final Model<Created> model;
-  final Created initialValue;
+  final Model<T> model;
 
   @override
-  _ModelHookState<Created> createState() =>
-      _ModelHookState<Created>(this.model);
+  _ModelHookState<T> createState() => _ModelHookState<T>();
 }
 
-class _ModelHookState<Created extends Object>
-    extends HookState<Created, _ModelHook<Created>> {
-  Created _state;
-  _ModelHookState(Model<Created> model);
+class _ModelHookState<T extends IPath> extends HookState<T, _ModelHook<T>> {
+  T _state;
+  final ModelContext _context = ModelContext._();
+  _ModelHookState();
   @override
   void initHook() {
     super.initHook();
     this._update();
   }
 
+  @override
+  void didUpdateHook(_ModelHook oldHook) {
+    super.didUpdateHook(oldHook);
+    if (oldHook.model.path != hook.model.path) {
+      this._update();
+    }
+  }
+
   void _update() {
-    this._listener(hook.initialValue);
-    Future<Created> future = hook.model.createTask(hook.model.context);
-    if (future == null) return;
-    future.then(this._listener);
+    FutureOr<T> future = hook.model.build(this._context);
+    if (future is Future<T>) {
+      future.then((value) {
+        value.listen(this._listener);
+        this._listener(value);
+      });
+    } else if (future is T) {
+      future.listen(this._listener);
+      this._listener(future);
+    }
   }
 
   @override
   void dispose() {
-    hook.model?.removeListener(this._state, this._listener);
+    this._state?.unlisten(this._listener);
     super.dispose();
   }
 
   @override
-  Created build(BuildContext context) {
+  T build(BuildContext context) {
     return this._state;
   }
 
-  void _listener(dynamic value) {
+  void _listener(T value) {
     this._state = value;
-    hook.model?.addListener(this._state, this._listener);
     setState(() {});
   }
 
