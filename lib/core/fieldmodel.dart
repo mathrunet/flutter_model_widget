@@ -139,6 +139,15 @@ abstract class FieldModel<TField extends IDataField> extends Model<TField>
     return state.getMap<K, V>(defaultValue);
   }
 
+  /// Get the data set in the field as [GeoData].
+  ///
+  /// You can pass an initial value to [defaultValue] if the data does not exist.
+  T getGeo<T extends GeoData>([T defaultValue]) {
+    TField state = this.state;
+    if (state == null) return defaultValue;
+    return state.getGeo<T>(defaultValue);
+  }
+
   @override
   Object get data {
     TField state = this.state;

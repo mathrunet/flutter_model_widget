@@ -139,6 +139,16 @@ abstract class DocumentModel<TDocument extends IDataDocument>
     return state.getMap<K, V>(key, defaultValue);
   }
 
+  /// Get the value stored in the document by [key] as [GeoData].
+  ///
+  /// You can pass an initial value to [defaultValue] if the data does not exist.
+  T getGeo<T extends GeoData>(String key,
+      [GeoData defaultValue = const GeoData()]) {
+    TDocument state = this.state;
+    if (state == null) return defaultValue;
+    return state.getGeo<T>(key, defaultValue);
+  }
+
   /// Remove all data from the document.
   void clear() {
     TDocument state = this.state;
