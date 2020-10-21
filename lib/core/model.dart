@@ -10,10 +10,19 @@ part of flutter_widget_model;
 @immutable
 abstract class Model<T extends IPath> {
   final String path;
+  final ModelContext _context;
 
   /// The base class of the model.
   @mustCallSuper
-  const Model(this.path) : assert(path != null, "You must specify the path.");
+  Model(this.path)
+      : this._context = ModelContext._(),
+        assert(path != null, "You must specify the path.") {
+    try {
+      use(_ModelHook(this));
+    } on AssertionError {
+      this.build(this._context);
+    }
+  }
 
   /// Build the model.
   ///
@@ -31,7 +40,6 @@ abstract class Model<T extends IPath> {
     try {
       BuildContext context = useContext();
       if (context == null) return PathMap.get<T>(this.path);
-      use(_ModelHook(this));
     } on AssertionError {}
     return PathMap.get<T>(this.path);
   }

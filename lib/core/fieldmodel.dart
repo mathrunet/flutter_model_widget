@@ -22,7 +22,7 @@ abstract class FieldModel<TField extends IDataField> extends Model<TField>
   ///
   /// By specifying [path], you can get data from [PathMap] as well, and you can get the data even outside of the build timing.
   @mustCallSuper
-  const FieldModel(String path) : super(path);
+  FieldModel(String path) : super(path);
 
   /// You can set and rewrite the data.
   ///

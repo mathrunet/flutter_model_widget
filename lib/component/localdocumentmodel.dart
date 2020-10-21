@@ -46,7 +46,7 @@ class LocalDocumentModel extends DocumentModel<LocalDocument> {
   /// Even if the application is terminated, the data will be restored and available.
   ///
   /// Defines the data document of the specified [path].
-  const LocalDocumentModel(String path) : super(path);
+  LocalDocumentModel(String path) : super(path);
   @override
   LocalDocument build(ModelContext context) {
     return LocalDocument.load(this.path);

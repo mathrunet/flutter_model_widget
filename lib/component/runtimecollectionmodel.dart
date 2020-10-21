@@ -43,7 +43,7 @@ class RuntimeCollectionModel extends CollectionModel<RuntimeCollection> {
   /// Defines the data document of the specified [path].
   ///
   /// If [data] is specified, [data] will be set to the specified [path].
-  const RuntimeCollectionModel(String path,
+  RuntimeCollectionModel(String path,
       {List<Map<String, dynamic>> data,
       OrderBy orderBy = OrderBy.none,
       String orderByKey,

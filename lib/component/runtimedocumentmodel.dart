@@ -45,7 +45,7 @@ class RuntimeDocumentModel extends DocumentModel<RuntimeDocument> {
   /// Defines the data document of the specified [path].
   ///
   /// If [data] is specified, [data] will be set to the specified [path].
-  const RuntimeDocumentModel(String path, {Map<String, dynamic> data})
+  RuntimeDocumentModel(String path, {Map<String, dynamic> data})
       : this._data = data,
         super(path);
   @override

@@ -35,7 +35,7 @@ abstract class CollectionModel<TCollection extends IDataCollection>
   ///
   /// You can sort by specifying [orderBy], [orderByKey].
   /// You can also specify [thenBy] and [thenByKey] to further sort the elements in the same order in the first sort.
-  const CollectionModel(String path,
+  CollectionModel(String path,
       {this.orderBy = OrderBy.none,
       this.orderByKey,
       this.thenBy = OrderBy.none,

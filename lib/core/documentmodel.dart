@@ -35,7 +35,7 @@ abstract class DocumentModel<TDocument extends IDataDocument>
   /// Create a data model that treats the data as a document.
   ///
   /// By specifying [path], you can get data from [PathMap] as well, and you can get the data even outside of the build timing.
-  const DocumentModel(String path) : super(path);
+  DocumentModel(String path) : super(path);
 
   /// Get the value corresponding to [key] from the document.
   dynamic operator [](Object key) {

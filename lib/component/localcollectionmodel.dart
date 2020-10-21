@@ -45,7 +45,7 @@ class LocalCollectionModel extends CollectionModel<LocalCollection> {
   /// Even if the application is terminated, the data will be restored and available.
   ///
   /// Defines the data document of the specified [path].
-  const LocalCollectionModel(String path,
+  LocalCollectionModel(String path,
       {OrderBy orderBy = OrderBy.none,
       String orderByKey,
       OrderBy thenBy = OrderBy.none,
