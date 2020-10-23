@@ -19,7 +19,7 @@ abstract class Model<T extends IPath> {
         assert(path != null, "You must specify the path.") {
     try {
       use(_ModelHook(this));
-    } on AssertionError {
+    } catch (e) {
       this.build(this._context);
     }
   }
@@ -36,11 +36,5 @@ abstract class Model<T extends IPath> {
   ///
   /// Normally, you will get the data from the [build] method.
   @protected
-  T get state {
-    try {
-      BuildContext context = useContext();
-      if (context == null) return PathMap.get<T>(this.path);
-    } on AssertionError {}
-    return PathMap.get<T>(this.path);
-  }
+  T get state => PathMap.get<T>(this.path);
 }
