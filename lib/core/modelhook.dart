@@ -31,11 +31,13 @@ class _ModelHookState<T extends IPath> extends HookState<T, _ModelHook<T>> {
     FutureOr<T> future = hook.model.build(this._context);
     if (future is Future<T>) {
       future.then((value) {
+        this._state?.unlisten(this._listener);
         this._state = value;
         this._state?.listen(this._listener);
         this._listener(value);
       });
     } else if (future is T) {
+      this._state?.unlisten(this._listener);
       this._state = future;
       this._state?.listen(this._listener);
       this._listener(future);
