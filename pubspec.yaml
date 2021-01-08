@@ -2,7 +2,7 @@ name: flutter_widget_model
 description: >-
   Package that allows you to treat your models like widgets.
   Used with [flutter_hooks].
-version: 0.5.2+1
+version: 0.6.0
 homepage: https://mathru.net
 repository: https://github.com/mathrunet/flutter_widget_model
 
@@ -13,8 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
   loading_animations: ^2.1.0
-  flutter_hooks: ^0.14.0
-  masamune_core: ^0.5.0
+  masamune_core: ^0.6.0
+  flutter_hooks: ^0.15.0
 
 dev_dependencies:
   flutter_test:

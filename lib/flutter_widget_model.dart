@@ -18,6 +18,7 @@ import 'package:loading_animations/loading_animations.dart';
 import 'package:masamune_core/masamune_core.dart';
 export 'package:masamune_core/masamune_core.dart';
 export 'package:flutter_hooks/flutter_hooks.dart';
+export 'package:flutter_hooks/flutter_hooks.dart';
 
 part 'core/modelhook.dart';
 part 'core/modelcontext.dart';
