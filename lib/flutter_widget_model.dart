@@ -29,7 +29,6 @@ part 'core/documentmodel.dart';
 part 'core/collectionmodel.dart';
 part 'core/documenthook.dart';
 part 'core/collectionhook.dart';
-part 'core/pathhook.dart';
 part 'core/refreshhook.dart';
 
 part 'component/datafieldmodel.dart';
