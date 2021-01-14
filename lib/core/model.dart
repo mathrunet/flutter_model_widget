@@ -17,11 +17,11 @@ abstract class Model<T extends IPath> {
   Model(this.path)
       : this._context = ModelContext._(),
         assert(path != null, "You must specify the path.") {
-    try {
-      use(_ModelHook(this));
-    } catch (e) {
-      this.build(this._context);
-    }
+    // try {
+    //   use(_ModelHook(this));
+    // } catch (e) {
+    this.build(this._context);
+    // }
   }
 
   /// Build the model.

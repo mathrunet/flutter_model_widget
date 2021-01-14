@@ -1,5 +1,16 @@
 part of flutter_widget_model;
 
+/// Model is used.
+///
+/// The widget will be rebuilt if there are any changes to the model.
+///
+/// Pass the model you want to hook into [model].
+T useModel<T extends Model>(T model) {
+  if (model == null) return model;
+  use(_ModelHook(model));
+  return model;
+}
+
 class _ModelHook<T extends IPath> extends Hook<T> {
   const _ModelHook(this.model);
 
@@ -34,13 +45,13 @@ class _ModelHookState<T extends IPath> extends HookState<T, _ModelHook<T>> {
         this._state?.unlisten(this._listener);
         this._state = value;
         this._state?.listen(this._listener);
-        this._listener(value);
+        //this._listener(value);
       });
     } else if (future is T) {
       this._state?.unlisten(this._listener);
       this._state = future;
       this._state?.listen(this._listener);
-      this._listener(future);
+      // this._listener(future);
     }
   }
 
